@@ -8,29 +8,12 @@ import { AiOutlineHeart, AiOutlineRight, AiOutlineCopy } from "react-icons/ai";
 import { RxCross2 } from "react-icons/rx";
 import { BsTrash, BsTranslate } from "react-icons/bs";
 import { motion, useAnimation } from "framer-motion";
-import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-  useDisclosure,
-  Button,
-} from "@chakra-ui/react";
 function App() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [translatedWord, setTranslatedWord] = useState("Translation");
   const [target, setTarget] = useState("en");
   const [source, setSource] = useState("ja");
   const [inputText, setInputText] = useState("");
-  const [favorites, setFavorites] = useState(() => {
-    const localValue = localStorage.getItem("ADVICE");
-    if (localValue == null) return [];
-
-    return JSON.parse(localValue);
-  });
   const changeTarget = (e) => {
     setTarget(e.target.value);
   };
@@ -38,13 +21,9 @@ function App() {
     setSource(e.target.value);
 
   };
-  useEffect(() => {
-    localStorage.setItem("ADVICE", JSON.stringify(favorites));
-  }, [favorites]);
+ 
 
   const callGoogleTranslateApi = async () => {
-    console.log("line 35");
-    console.log("This is the target language")
     setTranslatedWord("Loading...");
     const encodedParams = new URLSearchParams();
     encodedParams.set("source_language", source);
@@ -81,20 +60,6 @@ function App() {
     }
   
   };
-  const addToFavorites = (quote) => {
-    // if large scale nato, pedeng i map mo yung favorites array and then istore mo yung mga quotes sa isang array
-    if (favorites[favorites.length - 1]?.quote == quote) return;
-    setFavorites((currFavorites) => {
-      return [...currFavorites, { id: crypto.randomUUID(), quote }];
-    });
-    toast.success("Successfully added to favorites!");
-  };
-  function deleteFavorite(id) {
-    setFavorites((currFavorites) => {
-      return currFavorites.filter((favorite) => favorite.id !== id);
-    });
-    toast.error("Deleted!");
-  }
   return (
     <>
       <div className="fixed p-7 flex justify-between w-full">
@@ -143,40 +108,6 @@ function App() {
           <option value="de">German</option>
         </select>
       </div>
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader color="#78C1F3" fontSize="3xl">
-            Favorites <span>({favorites.length})</span>
-          </ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            {favorites.map((favorite) => (
-              <ul
-                key={favorite.id}
-                className="border-b-2 p-4 flex justify-between"
-              >
-                <li className="text-[#85A389]">{favorite.quote}</li>{" "}
-                <motion.button
-                  whileHover={{
-                    scale: 1.2,
-                    transition: { duration: 0.3 },
-                  }}
-                  whileTap={{ scale: 0.9 }}
-                >
-                  <BsTrash
-                    color="#78C1F3"
-                    size={20}
-                    onClick={() => deleteFavorite(favorite.id)}
-                  />
-                </motion.button>
-              </ul>
-            ))}
-          </ModalBody>
-
-          <ModalFooter></ModalFooter>
-        </ModalContent>
-      </Modal>
       <div className="flex w-full h-screen font-['Raleway']">
         <div className="bg-[#FFD89C] h-screen basis-[50%] flex flex-col justify-center items-start">
           <div className="ml-8">
@@ -210,7 +141,11 @@ function App() {
             </motion.form>
           </div>
         </div>
-        <div className="bg-[#78C1F3] h-screen basis-[50%] flex flex-col justify-center items-center">
+        <div 
+          initial={{ y: 100 }}
+              animate={{ y: 0 }}
+              transition={{ delay: 0.4, type: "spring", stiffness: 200 }}
+          className="bg-[#78C1F3] h-screen basis-[50%] flex flex-col justify-center items-center">
           <div className="h-[270px] w-[537px] pb-[230px] bg-white mx-4 rounded-[2rem] shadow-2xl pt-[20px] px-5 text-[#85A389] relative">
             <p className="text-[#85A389]">{translatedWord}</p>
             <motion.button
@@ -227,30 +162,6 @@ function App() {
               className="absolute bottom-6 rounded-full border-[#85A389] border p-2"
             >
               <AiOutlineCopy size={20} />
-            </motion.button>
-          </div>
-          <div className="flex justify-center gap-3 mx-6 mt-4">
-            <motion.button
-              whileHover={{
-                scale: 1.2,
-                transition: { duration: 0.3 },
-              }}
-              whileTap={{ scale: 0.9 }}
-              className="p-4 bg-white rounded-full"
-              // onClick={() => addToFavorites(translatedWord.translatedWord)}
-            >
-              <AiOutlineHeart color="#78C1F3" size={20} />
-            </motion.button>
-            <motion.button
-              whileHover={{
-                scale: 1.2,
-                transition: { duration: 0.3 },
-              }}
-              // onClick={callGoogleTranslateApi}
-              whileTap={{ scale: 0.9 }}
-              className="p-4 bg-white rounded-full"
-            >
-              <AiOutlineRight color="#78C1F3" size={20} />
             </motion.button>
           </div>
         </div>
