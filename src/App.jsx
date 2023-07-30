@@ -9,7 +9,6 @@ import { RxCross2 } from "react-icons/rx";
 import { BsTrash, BsTranslate } from "react-icons/bs";
 import { motion, useAnimation } from "framer-motion";
 function App() {
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const [translatedWord, setTranslatedWord] = useState("Translation");
   const [target, setTarget] = useState("en");
   const [source, setSource] = useState("ja");
@@ -72,9 +71,6 @@ function App() {
           <BsTranslate className="inline-block" color="#78C1F3"/> Lingo
           <span className="text-[#78C1F3]">Leap</span>
         </motion.h1>
-        <Button onClick={onOpen}>
-          <AiOutlineHeart color="#78C1F3" size={20} />
-        </Button>
       </div>
       {/* padding: 0.8rem;
   border: none;
@@ -142,11 +138,12 @@ function App() {
           </div>
         </div>
         <div 
-          initial={{ y: 100 }}
-              animate={{ y: 0 }}
-              transition={{ delay: 0.4, type: "spring", stiffness: 200 }}
           className="bg-[#78C1F3] h-screen basis-[50%] flex flex-col justify-center items-center">
-          <div className="h-[270px] w-[537px] pb-[230px] bg-white mx-4 rounded-[2rem] shadow-2xl pt-[20px] px-5 text-[#85A389] relative">
+          <motion.div 
+          initial={{ y: 100 }}
+          animate={{ y: 0 }}
+          transition={{ delay: 0.4, type: "spring", stiffness: 200 }}
+          className="h-[280px] w-[537px] pb-[230px] bg-white mx-4 rounded-[2rem] shadow-2xl pt-[20px] px-5 text-[#85A389] relative mb-[60px]">
             <p className="text-[#85A389]">{translatedWord}</p>
             <motion.button
               whileHover={{
@@ -163,7 +160,7 @@ function App() {
             >
               <AiOutlineCopy size={20} />
             </motion.button>
-          </div>
+          </motion.div>
         </div>
       </div>
       <div className="fixed p-7 bottom-2 w-full">
