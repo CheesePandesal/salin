@@ -68,8 +68,8 @@ function App() {
           transition={{ delay: 0.4, type: "spring", stiffness: 200 }}
           className="font-black text-2xl text-white inline-block"
         >
-          <BsTranslate className="inline-block" color="#78C1F3"/> Lingo
-          <span className="text-[#78C1F3]">Leap</span>
+          <BsTranslate className="inline-block" color="#78C1F3"/> 
+          <span className="text-[#78C1F3]">Salin</span>
         </motion.h1>
       </div>
       {/* padding: 0.8rem;
